@@ -43,22 +43,19 @@ class AuthController {
        let user = new User({fullName, email, password, role})
    
    
-       // send a mail to the user for verification
+
+         // send a mail to the user for verification
          //send email to user for verification, remember to handle general email sending errors
          const verificationToken = crypto.randomBytes(40).toString('hex');
          user.verificationToken = verificationToken
-
          let origin =req.get('host');
          let protocol = req.protocol;
-    
-         origin = `${protocol}://${origin}`;
+
+       
+         origin = process.env.ORIGIN || `${protocol}://${origin}`;
         
   
-
-
-
-
-        // comment out the origin and  protocol then include your own origin.....
+        
          const mail = await sendVerificationEmail(fullName, email,verificationToken,origin)
          if(!mail) throw new error.BadRequestError('Something went wrong')
          user.verificationToken = verificationToken
