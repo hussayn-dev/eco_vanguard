@@ -3,8 +3,6 @@ require("dotenv").config()
 const express = require('express')
 // const passport = require("passport")
 // const methodOverride = require('method-override')
-// const session = require('express-session')
-// const path = require('path')
 const logger = require('morgan');
 const rateLimiter = require('express-rate-limit');
 const helmet = require('helmet');
@@ -12,7 +10,7 @@ const xss = require('xss-clean');
 const cors = require('cors');
 const mongoSanitize = require('express-mongo-sanitize');
 
-// const  bodyParser = require('body-parser')
+const  bodyParser = require('body-parser')
 const cookieParser = require('cookie-parser');
 const app = express()
 
@@ -46,43 +44,20 @@ const messageRouter = require("./routes/messageRoute")
 const {notFound, errorHandler} = require("./middlewares/error-handler")
 
 
-// app.use(bodyParser.urlencoded({ extended: false }))
-// app.use(methodOverride('_method'))
-// app.set("views", path.join(__dirname, "..", "views"));
-// app.set("view engine", "ejs");
-
+app.use(bodyParser.urlencoded({ extended: false }))
+app.use(methodOverride('_method'))
 app.use(cookieParser(process.env.JWT_SECRET));
 app.use(logger('dev'));
 app.use(express.json())
 
 
-
-
-
-// initializePassport(passport)
-// googleStrategy(passport)
-// facebookStrategy(passport)
-
-// app.use(session({
-//     secret : "secret",
-//     resave : false,  
-//     saveUninitialized: false
-// }))
-
-//images and donation
-
-// app.use(passport.authenticate('session'));
 app.use("/api/v1/auth", authRouter)
 app.use("/api/v1/user", userRouter)
 app.use("/api/v1/project", projectRouter)
 app.use("/api/v1/event", eventRouter)
 app.use("/api/v1/profile", profileRouter)
 app.use("/api/v1/message", messageRouter)
-// app.get("/", (req, res, next) => {
-// res.render('index')
-// })
 
-// Newsletter, paystack // contact messages
 app.use(notFound)
 app.use(errorHandler)  
 
